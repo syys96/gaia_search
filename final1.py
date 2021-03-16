@@ -3,8 +3,11 @@ from astropy.coordinates import SkyCoord
 from astroquery.gaia import Gaia
 import numpy as np
 
-radius_limit = 0.02
+radius_limit = 1
 radius = u.Quantity(radius_limit, u.deg)
+
+au2ly = 3.26
+Gaia.ROW_LIMIT = 10
 
 total_data = []
 for ra in range(1):
@@ -19,11 +22,12 @@ for ra in range(1):
         for item in arr:
             assert data.colnames[2] == 'source_id'
             assert data.colnames[96] == 'dist'
-            arr_new.append([item[2], item[96]])
+            assert data.colnames[9] == 'parallax'
+            arr_new.append([item[2], item[96], item[9]])
         # print(type(arr))
         # print(len(list(arr)))
         # print(list(arr))
         total_data.extend(arr_new)
 
 print(total_data)
-np.save('./total_data.npy', total_data)
+np.save('./total_data_v2.npy', total_data)
